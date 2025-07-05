@@ -1,10 +1,9 @@
-
+import Navbar from "./components/NavBar"
 function App() {
   return (
     <>
-     helo world
+      <Navbar/> 
     </>
   )
 }
-
 export default App
