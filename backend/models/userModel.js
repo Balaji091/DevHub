@@ -37,6 +37,10 @@ const userSchema=new mongoose.Schema(
                 }
             }
         },
+        jobTitle:{
+            type:String,
+            default:"software develper",
+        },
         age:{
             type:Number ,
             min:18,
@@ -52,17 +56,11 @@ const userSchema=new mongoose.Schema(
         },
         about:{
             type:String,
-            default:"this is default about u",
+            default:" I am using DevTinder to connect with other developers and grow my network.",
         },
         photoUrl:{
             type:String,
-            default:"https://thumbs.dreamstime.com/b/default-profile-picture-avatar-photo-placeholder-vector-illustration-default-profile-picture-avatar-photo-placeholder-vector-189495158.jpg",
-            validate(photoUrl){
-                if(!validator.isURL(photoUrl)){
-                    throw new Error("photUrl is not url ")
-                }
-            }
-
+           
         },
         skills:{
             type:[String],
@@ -71,7 +69,22 @@ const userSchema=new mongoose.Schema(
                     throw new Error(" skills not greater then 10 ")
                 }
             }
-        }
+        },
+        company:{
+            type:String,
+            },
+        location:{
+            type:String,
+            default:"India"
+            
+        },
+        githubUrl:{
+            type:String,
+
+        },
+        linkedInUrl:{
+            type:String
+        },
 
     },
     {timestamps:true}

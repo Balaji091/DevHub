@@ -33,7 +33,13 @@ AuthRouter.post('/login',async(req,res)=>{
         const isPasswordValid=await user.validatePassword(data.password)
         if(isPasswordValid){ 
             const jwtToken=await user.getJWT()
-            res.cookie("jwtToken",jwtToken,{httpOnly:"true"})
+            res.cookie("jwtToken",jwtToken,{
+                httpOnly: false,
+                secure: true, // only true in production with httcrsrsps
+                sameSite: "None", // do not use "None" with secure: false
+                maxAge: 24 * 60 * 60 * 1000,
+                path : "/"
+                })
             res.send('success')  
         }
         else{

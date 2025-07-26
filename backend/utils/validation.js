@@ -14,7 +14,7 @@ const validateDetails=function (data){
     }
 }
 const validateAllowedFields=function(data){
-    const allowedUpdateFields=['age','gender','about','skills','photoUrl']
+    const allowedUpdateFields=['age','gender','about','skills','photoUrl','company','location','jobTitle','firstName','lastName',"githubUrl",'linkedInUrl']
     const isUpdateAllowed=Object.keys(data).every((k)=>allowedUpdateFields.includes(k))
     return isUpdateAllowed
 }

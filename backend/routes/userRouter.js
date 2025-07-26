@@ -3,7 +3,7 @@ const userAuthCheck = require('../middlewares/auth')
 const connectionRequest = require('../models/connectionRequestModel')
 const User = require('../models/userModel')
 const UserRouter=express.Router()
-const USER_SAVE_DATA=" firstName lastName age gender skills about "
+const USER_SAVE_DATA=" firstName lastName age gender skills about photoUrl  jobTitle company"
 // get all connections api 
 // get requests api
 // feed api 
@@ -21,32 +21,39 @@ UserRouter.get('/user/requests',userAuthCheck,async(req,res)=>{
         res.status(400).send(err.message)
     }
 })
-UserRouter.get('/user/connections',userAuthCheck,async(req,res)=>{
-    try{
-            const loggedUser=req.user
-            const connections=await connectionRequest.find({
-               $or:[
-                {toUserId:loggedUser,status:"accepted"},
-                 {fromUserId:loggedUser,status:"accepted"}
-               ]
-            })
-            .populate("fromUserId",USER_SAVE_DATA).populate("toUserId",USER_SAVE_DATA)
+UserRouter.get('/user/connections', userAuthCheck, async (req, res) => {
+  try {
+    const loggedUser = req.user;
 
-            const data=connections.map((row)=>{
-                if(row.fromUserId._id.toString()===loggedUser._id){
-                    return row.toUserId
-                }
-                return row.fromUserId
-            })
-            res.send(data)
+    const connections = await connectionRequest.find({
+      $or: [
+        { toUserId: loggedUser, status: "accepted" },
+        { fromUserId: loggedUser, status: "accepted" }
+      ]
+    })
+    .populate("fromUserId", USER_SAVE_DATA)
+    .populate("toUserId", USER_SAVE_DATA);
 
-    }
-    catch(err){
-        res.status(400).send(err.message)
-    }
-})
+    const data = connections.map((row) => {
+      if (row.fromUserId._id.toString() === loggedUser._id.toString()) {
+        return row.toUserId;
+      }
+      return row.fromUserId;
+    });
 
-UserRouter.get('/feed',userAuthCheck,async(req,res)=>{
+    // Filter out any accidental inclusion of the logged-in user
+    const filteredData = data.filter(
+      (user) => user._id.toString() !== loggedUser._id.toString()
+    );
+
+    res.send(filteredData);
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
+});
+
+
+UserRouter.get('/user/feed',userAuthCheck,async(req,res)=>{
     try{
         const loggedUser=req.user
 

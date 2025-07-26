@@ -36,6 +36,7 @@ ConnectionRequestRouter.post('/request/send/:status/:toUserId',userAuthCheck,asy
     }
     catch(err){
         res.status(404).send(err.message)
+        console.log(err.message)
     }
 })
 
